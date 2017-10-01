@@ -1,0 +1,23 @@
+{
+  "extends": [
+    "react-app",
+    "prettier"
+  ],
+  "plugins": [
+    "prettier"
+  ],
+  "overrides": [
+    {
+      "files": ["src/*.js"],
+      "excludedFiles": ["245.js", "dummy.js"]
+    }
+  ],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true
+      }
+    ]
+  }
+}

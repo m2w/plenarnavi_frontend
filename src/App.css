@@ -1,0 +1,9 @@
+* {
+  box-sizing: border-box;
+}
+
+.Content {
+  max-width: 50em;
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -1,0 +1,38 @@
+.AgendaItem {
+  font-size: x-large;
+  text-align: center;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.Row {
+  display: flex;
+}
+
+.Row + .Row {
+  margin-top: 1.5em;
+}
+
+.Speaker {
+  font-weight: bold;
+  flex-grow: 1;
+}
+
+.Text {
+  width: 40em;
+  flex-shrink: 0;
+}
+
+.Text .Itallic {
+  font-style: italic;
+  font-size: smaller;
+  margin-left: 1em;
+}
+
+.Text p {
+  margin: 0;
+}
+
+.Text p + p {
+  margin-top: 0.5em;
+}
