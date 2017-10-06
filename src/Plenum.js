@@ -15,7 +15,7 @@ class Plenum extends Component {
   }
   componentDidMount() {
     const plenumId = this.props.match.params.id;
-    fetch(`/data/${plenumId}.json`)
+    fetch(`./data/${plenumId}.json`)
       .then(resp => {
         if (resp.ok) {
           return resp.json();
