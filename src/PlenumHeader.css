@@ -4,10 +4,6 @@
   margin-bottom: 1rem;
 }
 
-.Title {
-  font-size: x-large;
-}
-
 .Burger {
   position: fixed;
   top: 1.2em;
@@ -81,8 +77,4 @@ a.unstyled:hover {
 
 .is-minor i {
   margin-right: 0.5em;
-}
-
-.hidden {
-  visibility: hidden;
 }

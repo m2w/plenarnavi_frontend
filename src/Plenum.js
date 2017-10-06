@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import './Plenum.css';
+import { Redirect } from 'react-router-dom';
+
 import Contribution from './Contribution';
 import Loading from './Loading';
 import PlenumHeader from './PlenumHeader';
 import Portrait from './Portrait';
-import { Redirect } from 'react-router-dom';
+
+import './Plenum.css';
 
 class Plenum extends Component {
   constructor(props) {

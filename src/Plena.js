@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import './Plena.css';
 import { Link } from 'react-router-dom';
+
+import Agenda from './Agenda';
 import Loading from './Loading';
+import PlenumStats from './PlenumStats';
+
+import './Plena.css';
 
 class Plena extends Component {
   constructor(props) {
@@ -32,6 +36,7 @@ class Plena extends Component {
     if (this.state.loading) {
       return <Loading />;
     }
+
     return (
       <div className="Plena">
         <div id="top" className="Header">
@@ -49,8 +54,10 @@ class Plena extends Component {
                   </div>
                   <div className="SubTitle">{p.date}</div>
                 </div>
-                {/* p.stats, p.agendaItems */}
-                <div className="Card-Content">stats here</div>
+                <div className="Card-Content">
+                  <Agenda items={p.agendaItems} />
+                  <PlenumStats data={p.stats} />
+                </div>
               </div>
             );
           })}

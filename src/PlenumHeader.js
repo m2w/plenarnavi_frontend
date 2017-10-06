@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import './PlenumHeader.css';
 import { Link } from 'react-router-dom';
+
+import Title from './Title';
+
+import './PlenumHeader.css';
 
 class PlenumHeader extends Component {
   constructor(props) {
@@ -53,8 +56,7 @@ class PlenumHeader extends Component {
             </div>
           </div>
         </div>
-        <div className="Title">{this.sessionTitle(this.props.sessionNr)}</div>
-        <div className="SubTitle">{this.props.date}</div>
+        <Title title={this.sessionTitle(this.props.sessionNr)} subTitle={this.props.date} />
       </div>
     );
   }

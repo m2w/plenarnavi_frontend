@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import './AgendaItem.css';
+
+import Title from './Title';
+
+import './Contribution.css';
 
 class Contribution extends Component {
   paragrafy(str) {
@@ -20,14 +23,10 @@ class Contribution extends Component {
     let item = this.props.data;
     if (item.speaker === undefined) {
       return (
-        <div id={item.id}>
-          <div className="Title">
-            {item.type} {item.id}
-          </div>
-          <div className="SubTitle">{item.summary}</div>
-        </div>
+        <Title id={item.id} title={`${item.type} ${item.id}`} subTitle={item.summary} />
       );
     }
+
     return (
       <div className="Row">
         <div className="Speaker">
