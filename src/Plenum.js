@@ -72,7 +72,8 @@ class Plenum extends Component {
         </div>
         <div className="ListOfAbsentees">
           {this.state.absentees.map(a => {
-            return <Portrait person={a} />;
+            // FIXME: use a proper key
+            return <Portrait key={a.last_name} person={a} />;
           })}
         </div>
         <div className="Transcript">
