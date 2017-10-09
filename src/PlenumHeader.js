@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import Title from './Title';
+import { scrollTop } from './utils/dom';
 
 import './PlenumHeader.css';
 
@@ -12,13 +13,16 @@ class PlenumHeader extends Component {
 
     this.toggleToC = this.toggleToC.bind(this);
   }
+
   sessionTitle(sessionNr) {
     return `Plenarprotokoll der ${sessionNr}. Sitzung`;
   }
+
   toggleToC(evt) {
     evt.preventDefault();
     this.setState({ tocVisible: !this.state.tocVisible });
   }
+
   render() {
     return (
       <div id="top" className="Header">
@@ -37,19 +41,25 @@ class PlenumHeader extends Component {
           </div>
           <div className="ToC-Contents">
             <div className="ToC-Item">
-              <a href="#absentees">Abwesende</a>
+              <a href="#absentees" onClick={scrollTop}>Abwesende</a>
             </div>
             {this.props.agendaItems.map(a => {
               return (
                 <div key={a.id} className="ToC-Item">
-                  <a href={`#${a.id}`}>
+                  <Link to={{
+                    pathname: `/plenum/${this.props.sessionNr}`,
+                    search: `item=${a.id}`,
+                    state: {
+                      item: a.id
+                    }
+                  }} replace>
                     {a.type} {a.id}
-                  </a>
+                  </Link>
                 </div>
               );
             })}
             <div className="ToC-Item is-minor">
-              <a href="#top">
+              <a href="#top" onClick={scrollTop}>
                 <i className="fa fa-long-arrow-up fa-lg" aria-hidden="true" />
                 Zum Anfang
               </a>

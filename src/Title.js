@@ -5,7 +5,7 @@ import './Title.css';
 class Title extends Component {
   render() {
     return (
-      <div className="">
+      <div className="" id={this.props.id}>
         <div className="Title">
           {this.props.title}
         </div>
