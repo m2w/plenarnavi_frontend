@@ -33,17 +33,20 @@ class Plenum extends Component {
         });
       })
       .catch(reason => {
-        console.log(reason);
-        // this.setState({ loading: false });
+        console.error(reason);
+        this.setState({ invalidId: true });
       });
   }
+
   render() {
     if (this.state.loading) {
       return <Loading />;
     }
+
     if (this.state.invalidId) {
       return <Redirect to="/not-found" />;
     }
+
     return (
       <div>
         <PlenumHeader
