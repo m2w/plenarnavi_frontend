@@ -55,7 +55,7 @@ class Plena extends Component {
                   <div className="SubTitle">{p.date}</div>
                 </div>
                 <div className="Card-Content">
-                  <Agenda items={p.agendaItems} />
+                  <Agenda session={p.session} items={p.agendaItems} />
                   <PlenumStats data={p.stats} />
                 </div>
               </div>
