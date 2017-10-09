@@ -12,14 +12,15 @@ class PlenumStats extends Component {
     return (
       <div className="PlenumStats">
         Abwesende:
-
-        CDU / CSU: {absences["CDU/CSU"]}
-        SPD: {absences["SPD"]}
-        Linke: {absences["DIE LINKE"]}
-        Grüne: {absences["BÜNDNIS 90/DIE GRÜNEN"]}
-        FDP: {absences["FDP"]}
-        AfD: {absences["AfD"]}
-        fraktionslos: {absences["fraktionslos"]}
+      <ul>
+          <li>CDU / CSU: {absences["CDU/CSU"]}</li>
+          <li>SPD: {absences["SPD"]}</li>
+          <li>Linke: {absences["DIE LINKE"]}</li>
+          <li>Grüne: {absences["BÜNDNIS 90/DIE GRÜNEN"]}</li>
+          <li>FDP: {absences["FDP"]}</li>
+          <li>AfD: {absences["AfD"]}</li>
+          <li>fraktionslos: {absences["fraktionslos"]}</li>
+        </ul>
       </div>
     );
   }
