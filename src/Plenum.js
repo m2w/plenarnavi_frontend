@@ -13,6 +13,19 @@ class Plenum extends Component {
     super(props);
     this.state = { loading: true, invalidId: false };
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    let lstate = this.props.location.state;
+    let item = lstate ? lstate.item : undefined;
+    // FIXME: quick hack
+    if (item !== undefined) {
+      let n = document.getElementById(item);
+      if (n !== null) {
+        window.scrollTo(0, n.offsetTop);
+      }
+    }
+  }
+
   componentDidMount() {
     const plenumId = this.props.match.params.id;
     fetch(`./data/${plenumId}.json`)
