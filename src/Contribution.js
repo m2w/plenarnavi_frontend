@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-import Title from './Title';
-
 import './Contribution.css';
 
 class Contribution extends Component {
@@ -20,20 +18,13 @@ class Contribution extends Component {
     );
   }
   render() {
-    let item = this.props.data;
-    if (item.speaker === undefined) {
-      return (
-        <Title id={item.id} title={`${item.type} ${item.id}`} subTitle={item.summary} />
-      );
-    }
-
     return (
-      <div className="Row">
+      <div className="Row" id={this.props.speech_id}>
         <div className="Speaker">
           {/* TODO: linkify speaker */}
-          {item.speaker.last_name}, {item.speaker.first_name}:
+          {this.props.speaker.last_name}, {this.props.speaker.first_name}:
         </div>
-        {this.paragrafy(item.speech)}
+        {this.paragrafy(this.props.text)}
       </div>
     );
   }

@@ -5,6 +5,7 @@ import Contribution from './Contribution';
 import Loading from './Loading';
 import PlenumHeader from './PlenumHeader';
 import Portrait from './Portrait';
+import { sortById } from './utils/helpers';
 
 import './Plenum.css';
 
@@ -27,8 +28,9 @@ class Plenum extends Component {
   }
 
   componentDidMount() {
-    const plenumId = this.props.match.params.id;
-    fetch(`./data/${plenumId}.json`)
+    const sid = this.props.match.params.sessionNumber;
+    const eid = this.props.match.params.electoralPeriod;
+    fetch(`./data/${eid}${sid}.json`)
       .then(resp => {
         if (resp.ok) {
           return resp.json();
@@ -36,13 +38,20 @@ class Plenum extends Component {
         throw new Error('unable to get plenum data');
       })
       .then(json => {
+        const agendaItems = sortById(json.agendaItems, 'agenda_id');
+        const speeches = sortById(json.speeches, 'speech_id');
+
         this.setState({
           loading: false,
-          agendaItems: json.agendaItems,
-          contributions: json.contributions,
-          date: json.date,
-          absentees: json.absentRepresentatives,
-          sessionNr: json.session
+          meta: {
+            agendaItems: agendaItems,
+            start: json.start_time,
+            end: json.end_time,
+            electoralPeriod: json.electoral_period,
+            sessionNr: json.session_number
+          },
+          contributions: speeches,
+          absentees: json.absentees
         });
       })
       .catch(reason => {
@@ -62,23 +71,18 @@ class Plenum extends Component {
 
     return (
       <div>
-        <PlenumHeader
-          agendaItems={this.state.agendaItems}
-          sessionNr={this.state.sessionNr}
-          date={this.state.date}
-        />
+        <PlenumHeader {...this.state.meta} />
         <div id="absentees" className="SubTitle">
           Abwesend waren:
         </div>
         <div className="ListOfAbsentees">
           {this.state.absentees.map(a => {
-            // FIXME: use a proper key
-            return <Portrait key={a.last_name} person={a} />;
+            return <Portrait key={a.uuid} {...a} />;
           })}
         </div>
         <div className="Transcript">
-          {this.state.contributions.map((i, idx) => {
-            return <Contribution key={`contribution-${idx}`} data={i} />;
+          {this.state.contributions.map(i => {
+            return <Contribution key={i.uuid} {...i} />;
           })}
         </div>
       </div>

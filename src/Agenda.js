@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import { sortById } from './utils/helpers';
+
 import './Agenda.css';
 
 class Agenda extends Component {
@@ -25,25 +27,32 @@ class Agenda extends Component {
       );
     }
 
-    const sid = this.props.session;
+    const items = sortById(this.props.agendaItems, 'agenda_id');
+    const sid = this.props.session_number;
+    const eid = this.props.electoral_period;
     return (
       <div className="Agenda">
         <div onClick={this.toggleItems}>
           <i className="fa fa-caret-up" aria-hidden="true" /> Agenda
         </div>
         <ul>
-          {this.props.items.map(i => {
+          {items.map(i => {
             return (
-              <li>
-                <Link to={{
-                  pathname: `/plenum/${sid}`,
-                  search: `item=${i.id}`,
-                  state: {
-                    item: i.id
-                  }
-                }} >
-                  {i.type} {i.id}
-                </Link>
+              <li key={i.uuid}>
+                <p>
+                  <Link
+                    to={{
+                      pathname: `/plenum/${eid}/${sid}`,
+                      search: `item=${i.agenda_id}`,
+                      state: {
+                        item: i.id
+                      }
+                    }}
+                  >
+                    {i.name}
+                  </Link>
+                </p>
+                <p>{i.summary}</p>
               </li>
             );
           })}

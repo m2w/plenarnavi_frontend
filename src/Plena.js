@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 
 import Agenda from './Agenda';
 import Loading from './Loading';
-import PlenumStats from './PlenumStats';
+// import PlenumStats from './PlenumStats';
+import { formatDate } from './utils/format';
 
 import './Plena.css';
 
@@ -13,7 +14,7 @@ class Plena extends Component {
     this.state = { loading: true };
   }
   componentDidMount() {
-    fetch(`./data/plenums.json`)
+    fetch(`./data/session.json`)
       .then(resp => {
         if (resp.ok) {
           return resp.json();
@@ -44,19 +45,23 @@ class Plena extends Component {
         </div>
         <div className="Plena-List">
           {this.state.data.map(p => {
+            let start = new Date(p.start_time);
+
             return (
-              <div key={p.session} className="Card">
+              <div key={p.uuid} className="Card">
                 <div className="Card-Header">
                   <div className="Title">
-                    <Link to={`/plenum/${p.session}`}>
-                      Sitzung Nr. {p.session}
+                    <Link
+                      to={`/plenum/${p.electoral_period}/${p.session_number}`}
+                    >
+                      Sitzung Nr. {p.session_number}
                     </Link>
                   </div>
-                  <div className="SubTitle">{p.date}</div>
+                  <div className="SubTitle">{formatDate(start)}</div>
                 </div>
                 <div className="Card-Content">
-                  <Agenda session={p.session} items={p.agendaItems} />
-                  <PlenumStats data={p.stats} />
+                  <Agenda {...p} />
+                  {/* <PlenumStats data={p.stats} /> */}
                 </div>
               </div>
             );

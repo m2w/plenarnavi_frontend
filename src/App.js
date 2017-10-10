@@ -15,7 +15,10 @@ class App extends Component {
           <div className="Content">
             <Switch>
               <Route exact path="/" component={Plena} />
-              <Route path="/plenum/:id" component={Plenum} />
+              <Route
+                path="/plenum/:electoralPeriod/:sessionNumber"
+                component={Plenum}
+              />
               <Route component={NotFound} />
             </Switch>
           </div>

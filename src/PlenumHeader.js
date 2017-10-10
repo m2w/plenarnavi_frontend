@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Title from './Title';
 import { scrollTop } from './utils/dom';
+import { formatDate } from './utils/format';
 
 import './PlenumHeader.css';
 
@@ -24,6 +25,7 @@ class PlenumHeader extends Component {
   }
 
   render() {
+    const start = new Date(this.props.start);
     return (
       <div id="top" className="Header">
         <div className="Burger" onClick={this.toggleToC}>
@@ -41,19 +43,23 @@ class PlenumHeader extends Component {
           </div>
           <div className="ToC-Contents">
             <div className="ToC-Item">
-              <a href="#absentees" onClick={scrollTop}>Abwesende</a>
+              <a href="#absentees" onClick={scrollTop}>
+                Abwesende
+              </a>
             </div>
             {this.props.agendaItems.map(a => {
               return (
-                <div key={a.id} className="ToC-Item">
-                  <Link to={{
-                    pathname: `/plenum/${this.props.sessionNr}`,
-                    search: `item=${a.id}`,
-                    state: {
-                      item: a.id
-                    }
-                  }} replace>
-                    {a.type} {a.id}
+                <div key={a.uuid} className="ToC-Item">
+                  <Link
+                    to={{
+                      search: `item=${a.agenda_id}`,
+                      state: {
+                        item: a.agenda_id
+                      }
+                    }}
+                    replace
+                  >
+                    {a.name}
                   </Link>
                 </div>
               );
@@ -66,7 +72,11 @@ class PlenumHeader extends Component {
             </div>
           </div>
         </div>
-        <Title title={this.sessionTitle(this.props.sessionNr)} subTitle={this.props.date} />
+        {/* TODO: add start / end times */}
+        <Title
+          title={this.sessionTitle(this.props.sessionNr)}
+          subTitle={formatDate(start)}
+        />
       </div>
     );
   }

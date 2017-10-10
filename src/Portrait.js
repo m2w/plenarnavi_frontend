@@ -3,12 +3,13 @@ import './Portrait.css';
 
 class Portrait extends Component {
   render() {
-    // TODO: implement
-    const p = this.props.person;
+    const degree = this.props.degree ? this.props.degree : '';
     return (
-      <div className="Portrait">
-        {p.last_name}, {p.first_name}
-      </div>
+      <img
+        className="Portrait"
+        //src={this.props.image_url}
+        alt={`${degree} ${this.props.first_name} ${this.props.last_name}`}
+      />
     );
   }
 }
