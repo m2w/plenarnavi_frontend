@@ -66,17 +66,65 @@ class PlenumEditor extends Component {
   }
 
   toggleSpeechForAgendaItem(evt) {
-    const val = evt.target.value;
-    // this.state.meta.agendaItems
+    // speech UUID
+    const val = evt.target.id;
     // should be an agendaItem UUID
+    // TODO: implement
     const selectedAgendaItem = undefined;
-    // TODO: update data and send the change to the backend
+    const idx = this.state.meta.agendaItems.findIndex(i => {
+      return i.uuid = selectedAgendaItem;
+    });
+
+    // make a copy of the agendaItems
+    const agendaItems = this.state.meta.agendaItems.slice();
+    // remove the agendaItem we want to update
+    const ai = agendaItems.splice(idx, 1)[0];
+    const as = new Set(ai.speeches);
+    if (as.has(val)) {
+      as.delete(val);
+    } else {
+      as.add(val);
+    }
+
+    const updatedSpeeches = Array.from(as);
+    // update the speeches array
+    ai.speeches = updatedSpeeches;
+    // re-insert our update agendaItem
+    agendaItems.splice(idx, 0, ai);
+
+    let newMeta = this.state.meta;
+    newMeta.agendaItems = agendaItems;
+    // this.setState({ meta: newMeta });
+    // TODO: send the change to the backend
   }
 
   splitSpeech(speechId, caretPosition) {
-    // TODO: update data and submit change to the backend
-    console.log(speechId, caretPosition);
-    // this.state.contributions[speechId]
+    const cons = this.state.contributions.slice();
+    const speech = cons.splice(speechId, 1)[0];
+    const partA = speech.text.slice(0, caretPosition);
+    const partB = speech.text.slice(caretPosition);
+
+    const id = speech.speech_id;
+    // TODO: need new UUID(s)!
+    // TODO: update agendaItems! -> add speechB
+    let speechA = Object.assign({}, speech);
+    speechA.text = partA;
+    let speechB = Object.assign({}, speech);
+    speechB.text = partB;
+    speechB.speech_id = id + 1;
+
+    const newCons = cons.map(c => {
+      if (c.speech_id > id) {
+        c.speech_id = c.speech_id + 1;
+      }
+      return c;
+    });
+    newCons.splice(speechA.speech_id, 0, speechA);
+    newCons.splice(speechB.speech_id, 0, speechB);
+    console.log(newCons);
+
+    this.setState({contributions: newCons});
+    // TODO: submit change to the backend
   }
 
   render() {
@@ -99,7 +147,8 @@ class PlenumEditor extends Component {
             const agendaItems = this.agendaItems || [];
             return (
               <div className="" key={i.uuid}>
-                <option
+                <input
+                  type="checkbox"
                   id={i.uuid}
                   onChange={this.toggleSpeechForAgendaItem}
                   value={agendaItems.includes(selectedAgendaItem) ? true : false}

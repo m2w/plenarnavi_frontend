@@ -31,9 +31,12 @@ class Contribution extends Component {
   }
 
   prompForSplit(evt) {
-    // TODO: add an actual prompt
     const selStart = evt.target.selectionStart;
-    this.props.handleSplit(this.props.speech_id, selStart);
+    // TODO: style
+    const split = window.confirm('split?');
+    if (split) {
+      this.props.handleSplit(this.props.speech_id, selStart);
+    }
   }
 
   render() {
@@ -44,7 +47,7 @@ class Contribution extends Component {
             {/* TODO: linkify speaker */}
             {this.props.speaker.last_name}, {this.props.speaker.first_name}:
           </div>
-          <Textarea className="EditableText" value={this.doubleLineBreaks(this.props.text)} onSelect={this.prompForSplit} readOnly />
+          <Textarea className="EditableText" value={this.doubleLineBreaks(this.props.text)} onClick={this.prompForSplit} readOnly />
         </div>
       );
     }
