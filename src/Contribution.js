@@ -18,6 +18,19 @@ class Contribution extends Component {
     );
   }
   render() {
+    if (this.props.editable) {
+      return (
+        <div className="Row" id={this.props.speech_id}>
+          <div className="Speaker">
+            {/* TODO: linkify speaker */}
+            {this.props.speaker.last_name}, {this.props.speaker.first_name}:
+          </div>
+          {/* TODO: on select, give option to split */}
+          <textarea value={this.props.text} readOnly />
+        </div>
+      );
+    }
+
     return (
       <div className="Row" id={this.props.speech_id}>
         <div className="Speaker">
