@@ -17,12 +17,12 @@ class App extends Component {
             <Switch>
               <Route exact path="/" component={Plena} />
               <Route
-                path="/plenum/:electoralPeriod/:sessionNumber"
-                component={Plenum}
-              />
-              <Route
                 path="/plenum/:electoralPeriod/:sessionNumber/edit"
                 component={PlenumEditor}
+              />
+              <Route
+                path="/plenum/:electoralPeriod/:sessionNumber"
+                component={Plenum}
               />
               <Route component={NotFound} />
             </Switch>

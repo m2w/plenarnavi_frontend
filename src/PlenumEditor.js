@@ -7,12 +7,9 @@ import PlenumHeader from './PlenumHeader';
 import Portrait from './Portrait';
 import { sortById } from './utils/helpers';
 
-import './Plenum.css';
+import './PlenumEditor.css';
 
-// TODO: set cursor inside textarea -> split button -> split speech
-// readonly textarea
 // TODO: select agendaitem from list, then select speeches to attach it to
-
 
 class PlenumEditor extends Component {
   constructor(props) {
@@ -20,6 +17,7 @@ class PlenumEditor extends Component {
     this.state = { loading: true, invalidId: false };
 
     this.toggleSpeechForAgendaItem = this.toggleSpeechForAgendaItem.bind(this);
+    this.splitSpeech = this.splitSpeech.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -69,9 +67,16 @@ class PlenumEditor extends Component {
 
   toggleSpeechForAgendaItem(evt) {
     const val = evt.target.value;
+    // this.state.meta.agendaItems
     // should be an agendaItem UUID
     const selectedAgendaItem = undefined;
     // TODO: update data and send the change to the backend
+  }
+
+  splitSpeech(speechId, caretPosition) {
+    // TODO: update data and submit change to the backend
+    console.log(speechId, caretPosition);
+    // this.state.contributions[speechId]
   }
 
   render() {
@@ -91,15 +96,15 @@ class PlenumEditor extends Component {
         <PlenumHeader {...this.state.meta} />
         <div className="Transcript">
           {this.state.contributions.map(i => {
+            const agendaItems = this.agendaItems || [];
             return (
-              <div className="">
+              <div className="" key={i.uuid}>
                 <option
-                  value={i.uuid}
+                  id={i.uuid}
                   onChange={this.toggleSpeechForAgendaItem}
-                  selected={selectedAgendaItem === i.agendaItem ? true : false}
+                  value={agendaItems.includes(selectedAgendaItem) ? true : false}
                 />
-                {/* TODO: make this a textarea */}
-                <Contribution key={i.uuid} {...i} editable />
+                <Contribution handleSplit={this.splitSpeech} editable {...i} />
               </div>
             );
           })}
@@ -109,4 +114,4 @@ class PlenumEditor extends Component {
   }
 }
 
-export default Plenum;
+export default PlenumEditor;

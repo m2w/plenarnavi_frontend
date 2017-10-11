@@ -1,0 +1,4 @@
+.Entry {
+  display: flex;
+  flex-direction: row;
+}
