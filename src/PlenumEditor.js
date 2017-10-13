@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 
+import AgendaItemPicker from './AgendaItemPicker';
 import Contribution from './Contribution';
 import Loading from './Loading';
 import PlenumHeader from './PlenumHeader';
-import Portrait from './Portrait';
 import { sortById } from './utils/helpers';
 
 import './PlenumEditor.css';
-
-// TODO: select agendaitem from list, then select speeches to attach it to
 
 class PlenumEditor extends Component {
   constructor(props) {
@@ -18,6 +16,7 @@ class PlenumEditor extends Component {
 
     this.toggleSpeechForAgendaItem = this.toggleSpeechForAgendaItem.bind(this);
     this.splitSpeech = this.splitSpeech.bind(this);
+    this.selectAgendaItem = this.selectAgendaItem.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -70,7 +69,7 @@ class PlenumEditor extends Component {
     const val = evt.target.id;
     // should be an agendaItem UUID
     // TODO: implement
-    const selectedAgendaItem = undefined;
+    const selectedAgendaItem = this.state.selectedAgendaItem;
     const idx = this.state.meta.agendaItems.findIndex(i => {
       return i.uuid = selectedAgendaItem;
     });
@@ -123,8 +122,15 @@ class PlenumEditor extends Component {
     newCons.splice(speechB.speech_id, 0, speechB);
     console.log(newCons);
 
-    this.setState({contributions: newCons});
+    this.setState({ contributions: newCons });
     // TODO: submit change to the backend
+  }
+
+  selectAgendaItem(evt) {
+    const uuid = evt.target.value;
+    if (uuid !== 'dummy') {
+      this.setState({ selectedAgendaItem: uuid });
+    }
   }
 
   render() {
@@ -141,7 +147,9 @@ class PlenumEditor extends Component {
 
     return (
       <div>
-        <PlenumHeader {...this.state.meta} />
+        <PlenumHeader {...this.state.meta}>
+          <AgendaItemPicker selectAgendaItem={this.selectAgendaItem} agendaItems={this.state.meta.agendaItems} />
+        </PlenumHeader>
         <div className="Transcript">
           {this.state.contributions.map(i => {
             const agendaItems = this.agendaItems || [];

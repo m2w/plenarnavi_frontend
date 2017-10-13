@@ -5,6 +5,7 @@ import Contribution from './Contribution';
 import Loading from './Loading';
 import PlenumHeader from './PlenumHeader';
 import Portrait from './Portrait';
+import ToC from './ToC';
 import { sortById } from './utils/helpers';
 
 import './Plenum.css';
@@ -12,7 +13,7 @@ import './Plenum.css';
 class Plenum extends Component {
   constructor(props) {
     super(props);
-    this.state = { loading: true, invalidId: false };
+    this.state = { loading: true, invalidId: false, agendaItems: [] };
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -71,7 +72,9 @@ class Plenum extends Component {
 
     return (
       <div>
-        <PlenumHeader {...this.state.meta} />
+        <PlenumHeader {...this.state.meta}>
+          <ToC agendaItems={this.state.meta.agendaItems} />
+        </PlenumHeader>
         <div id="absentees" className="SubTitle">
           Abwesend waren:
         </div>
