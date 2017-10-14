@@ -39,7 +39,7 @@ class Plenum extends Component {
         throw new Error('unable to get plenum data');
       })
       .then(json => {
-        const agendaItems = sortById(json.agendaItems, 'agenda_id');
+        const agendaItems = sortById(json.agenda_items, 'agenda_id');
         const speeches = sortById(json.speeches, 'speech_id');
 
         this.setState({

@@ -27,7 +27,7 @@ class Agenda extends Component {
       );
     }
 
-    const items = sortById(this.props.agendaItems, 'agenda_id');
+    const items = sortById(this.props.agenda_items, 'agenda_id');
     const sid = this.props.session_number;
     const eid = this.props.electoral_period;
     return (

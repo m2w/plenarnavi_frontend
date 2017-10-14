@@ -14,7 +14,7 @@ class Plena extends Component {
     this.state = { loading: true };
   }
   componentDidMount() {
-    fetch(`./data/session.json`)
+    fetch(`./data/sessions.json`)
       .then(resp => {
         if (resp.ok) {
           return resp.json();

@@ -45,7 +45,7 @@ class Contribution extends Component {
         <div className="Row" id={this.props.speech_id}>
           <div className="Speaker">
             {/* TODO: linkify speaker */}
-            {this.props.speaker.last_name}, {this.props.speaker.first_name}:
+            {this.props.person.last_name}, {this.props.person.first_name}:
           </div>
           <Textarea className="EditableText" value={this.doubleLineBreaks(this.props.text)} onClick={this.prompForSplit} readOnly />
         </div>
@@ -56,7 +56,7 @@ class Contribution extends Component {
       <div className="Row" id={this.props.speech_id}>
         <div className="Speaker">
           {/* TODO: linkify speaker */}
-          {this.props.speaker.last_name}, {this.props.speaker.first_name}:
+          {this.props.person.last_name}, {this.props.person.first_name}:
         </div>
         {this.paragrafy(this.props.text)}
       </div>
