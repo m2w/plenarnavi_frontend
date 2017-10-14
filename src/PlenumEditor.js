@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
+import * as uuid from 'uuid/v4';
 
 import AgendaItemPicker from './AgendaItemPicker';
 import Contribution from './Contribution';
@@ -12,7 +13,7 @@ import './PlenumEditor.css';
 class PlenumEditor extends Component {
   constructor(props) {
     super(props);
-    this.state = { loading: true, invalidId: false };
+    this.state = { loading: true, invalidId: false, selectedAgendaItem: 'dummy' };
 
     this.toggleSpeechForAgendaItem = this.toggleSpeechForAgendaItem.bind(this);
     this.splitSpeech = this.splitSpeech.bind(this);
@@ -65,13 +66,16 @@ class PlenumEditor extends Component {
   }
 
   toggleSpeechForAgendaItem(evt) {
-    // speech UUID
-    const val = evt.target.id;
-    // should be an agendaItem UUID
-    // TODO: implement
+    const speechUUID = evt.target.id;
+    // agendaItem UUID
     const selectedAgendaItem = this.state.selectedAgendaItem;
     const idx = this.state.meta.agendaItems.findIndex(i => {
       return i.uuid = selectedAgendaItem;
+    });
+
+    // grab the speech corresponding to the UUID
+    const speech = this.state.contributions.find(c => {
+      return c.uuid === speechUUID;
     });
 
     // make a copy of the agendaItems
@@ -79,22 +83,30 @@ class PlenumEditor extends Component {
     // remove the agendaItem we want to update
     const ai = agendaItems.splice(idx, 1)[0];
     const as = new Set(ai.speeches);
-    if (as.has(val)) {
-      as.delete(val);
+    if (as.has(speechUUID)) {
+      speech.agenda_item_uuid = undefined;
+      as.delete(speechUUID);
     } else {
-      as.add(val);
+      speech.agenda_item_uuid = selectedAgendaItem;
+      as.add(speechUUID);
     }
 
     const updatedSpeeches = Array.from(as);
     // update the speeches array
     ai.speeches = updatedSpeeches;
-    // re-insert our update agendaItem
+    // re-insert our updated agendaItem
     agendaItems.splice(idx, 0, ai);
 
-    let newMeta = this.state.meta;
+    let newMeta = Object.assign({}, this.state.meta);
     newMeta.agendaItems = agendaItems;
-    // this.setState({ meta: newMeta });
-    // TODO: send the change to the backend
+
+    fetch(`/speeches/${speechUUID}`, {
+      method: 'PUT',
+      body: JSON.stringify(speech)
+    }).then(resp => {
+      console.log(resp);
+      this.setState({ meta: newMeta });
+    });
   }
 
   splitSpeech(speechId, caretPosition) {
@@ -104,12 +116,12 @@ class PlenumEditor extends Component {
     const partB = speech.text.slice(caretPosition);
 
     const id = speech.speech_id;
-    // TODO: need new UUID(s)!
-    // TODO: update agendaItems! -> add speechB
+
     let speechA = Object.assign({}, speech);
     speechA.text = partA;
     let speechB = Object.assign({}, speech);
     speechB.text = partB;
+    speechB.uuid = uuid();
     speechB.speech_id = id + 1;
 
     const newCons = cons.map(c => {
@@ -120,17 +132,25 @@ class PlenumEditor extends Component {
     });
     newCons.splice(speechA.speech_id, 0, speechA);
     newCons.splice(speechB.speech_id, 0, speechB);
-    console.log(newCons);
 
-    this.setState({ contributions: newCons });
-    // TODO: submit change to the backend
+    let a = fetch(`/speeches/${speechA.uuid}`, {
+      method: 'PUT',
+      body: JSON.stringify(speechA)
+    });
+    let b = fetch('/speeches/', {
+      method: 'POST',
+      body: JSON.stringify(speechB)
+    });
+    Promise.all([a, b]).then(result => {
+      console.log('done here');
+      console.log(result);
+      this.setState({ contributions: newCons });
+    });
   }
 
   selectAgendaItem(evt) {
     const uuid = evt.target.value;
-    if (uuid !== 'dummy') {
-      this.setState({ selectedAgendaItem: uuid });
-    }
+    this.setState({ selectedAgendaItem: uuid });
   }
 
   render() {
@@ -142,9 +162,6 @@ class PlenumEditor extends Component {
       return <Redirect to="/not-found" />;
     }
 
-    // should be an agendaItem UUID
-    const selectedAgendaItem = undefined;
-
     return (
       <div>
         <PlenumHeader {...this.state.meta}>
@@ -152,14 +169,13 @@ class PlenumEditor extends Component {
         </PlenumHeader>
         <div className="Transcript">
           {this.state.contributions.map(i => {
-            const agendaItems = this.agendaItems || [];
             return (
               <div className="" key={i.uuid}>
                 <input
                   type="checkbox"
                   id={i.uuid}
                   onChange={this.toggleSpeechForAgendaItem}
-                  value={agendaItems.includes(selectedAgendaItem) ? true : false}
+                  checked={i.agenda_item_uuid === this.state.selectedAgendaItem ? true : false}
                 />
                 <Contribution handleSplit={this.splitSpeech} editable {...i} />
               </div>
