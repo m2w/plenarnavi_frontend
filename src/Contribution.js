@@ -9,7 +9,7 @@ const noop = () => {
 class Contribution extends Component {
   constructor(props) {
     super(props);
-    this.prompForSplit = this.prompForSplit.bind(this);
+    this.prompForSplit = this.promptForSplit.bind(this);
     this.paragrafy = this.paragrafy.bind(this);
 
     this.state = { editable: false };
@@ -20,7 +20,7 @@ class Contribution extends Component {
     return (
       <div className="Text">
         {parts.map((p, idx) => {
-          const handler = this.props.editable ? this.prompForSplit(idx) : noop;
+          const handler = this.props.editable ? this.promptForSplit(idx) : noop;
           return (
             <p
               className={p.startsWith('(') ? 'Itallic' : ''}
@@ -35,7 +35,7 @@ class Contribution extends Component {
     );
   }
 
-  prompForSplit(paragraphIdx) {
+  promptForSplit(paragraphIdx) {
     return evt => {
       const selection = document.getSelection();
       // TODO: style
