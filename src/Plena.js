@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 import Agenda from './Agenda';
+import Header from './Header';
 import Loading from './Loading';
+import Title from './Title';
 // import PlenumStats from './PlenumStats';
 import { formatDate } from './utils/format';
 
@@ -40,9 +42,9 @@ class Plena extends Component {
 
     return (
       <div className="Plena">
-        <div id="top" className="Header">
-          <div className="Title">Chronologische Liste der Plenarsitzungen</div>
-        </div>
+        <Header>
+          <Title>Chronologische Liste der Plenarsitzungen</Title>
+        </Header>
         <div className="Plena-List">
           {this.state.data.map(p => {
             let start = new Date(p.start_time);
@@ -50,14 +52,13 @@ class Plena extends Component {
             return (
               <div key={p.uuid} className="Card">
                 <div className="Card-Header">
-                  <div className="Title">
+                  <Title subTitle={formatDate(start)}>
                     <Link
                       to={`/plenum/${p.electoral_period}/${p.session_number}`}
                     >
                       Sitzung Nr. {p.session_number}
                     </Link>
-                  </div>
-                  <div className="SubTitle">{formatDate(start)}</div>
+                  </Title>
                 </div>
                 <div className="Card-Content">
                   <Agenda {...p} />

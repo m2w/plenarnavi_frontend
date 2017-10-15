@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import Header from './Header';
 import Title from './Title';
 import { formatDate } from './utils/format';
 
@@ -25,14 +26,13 @@ class PlenumHeader extends Component {
   render() {
     const start = new Date(this.props.start);
     return (
-      <div id="top" className="Header">
+      <Header>
         {this.props.children}
         {/* TODO: add start / end times */}
-        <Title
-          title={this.sessionTitle(this.props.sessionNr)}
-          subTitle={formatDate(start)}
-        />
-      </div>
+        <Title subTitle={formatDate(start)}>
+          {this.sessionTitle(this.props.sessionNr)}
+        </Title>
+      </Header>
     );
   }
 }
