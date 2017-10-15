@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import './Portrait.css';
 
 class Portrait extends Component {
