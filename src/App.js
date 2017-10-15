@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import Plena from './Plena';
 import Plenum from './Plenum';
@@ -13,6 +14,10 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
+          <Helmet>
+            <title>PlenarNavi</title>
+            <meta name="description">TODO</meta>
+          </Helmet>
           <div className="Content">
             <Switch>
               <Route exact path="/" component={Plena} />
