@@ -6,16 +6,6 @@
   margin-top: 1.5em;
 }
 
-.EditableText {
-  flex-shrink: 0;
-  width: 40em;
-  resize: none;
-  border: none;
-  outline: none;
-  font-family: sans-serif;
-  font-size: 100%;
-}
-
 .Speaker {
   font-weight: bold;
   flex-grow: 1;

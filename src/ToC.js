@@ -36,7 +36,9 @@ class ToC extends Component {
           </div>
           <div className="ToC-Contents">
             <div className="ToC-Item">
-              <a href="#absentees" onClick={scrollTop}>Abwesende</a>
+              <a href="#absentees" onClick={scrollTop}>
+                Abwesende
+              </a>
             </div>
             {this.props.agendaItems.map(a => {
               return (
@@ -58,7 +60,8 @@ class ToC extends Component {
             <div className="ToC-Item is-minor">
               <a href="#top" onClick={scrollTop}>
                 <i className="fa fa-long-arrow-up fa-lg" aria-hidden="true" />
-                Zum Anfang</a>
+                Zum Anfang
+              </a>
             </div>
           </div>
         </div>

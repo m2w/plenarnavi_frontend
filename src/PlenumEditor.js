@@ -13,7 +13,11 @@ import './PlenumEditor.css';
 class PlenumEditor extends Component {
   constructor(props) {
     super(props);
-    this.state = { loading: true, invalidId: false, selectedAgendaItem: 'dummy' };
+    this.state = {
+      loading: true,
+      invalidId: false,
+      selectedAgendaItem: 'dummy'
+    };
 
     this.toggleSpeechForAgendaItem = this.toggleSpeechForAgendaItem.bind(this);
     this.splitSpeech = this.splitSpeech.bind(this);
@@ -43,7 +47,7 @@ class PlenumEditor extends Component {
         throw new Error('unable to get plenum data');
       })
       .then(json => {
-        const agendaItems = sortById(json.agendaItems, 'agenda_id');
+        const agendaItems = sortById(json.agenda_items, 'agenda_id');
         const speeches = sortById(json.speeches, 'speech_id');
 
         this.setState({
@@ -70,7 +74,7 @@ class PlenumEditor extends Component {
     // agendaItem UUID
     const selectedAgendaItem = this.state.selectedAgendaItem;
     const idx = this.state.meta.agendaItems.findIndex(i => {
-      return i.uuid = selectedAgendaItem;
+      return i.uuid === selectedAgendaItem;
     });
 
     // grab the speech corresponding to the UUID
@@ -109,11 +113,18 @@ class PlenumEditor extends Component {
     });
   }
 
-  splitSpeech(speechId, caretPosition) {
+  splitSpeech(speechId, paragraphIdx, caretPosition) {
     const cons = this.state.contributions.slice();
     const speech = cons.splice(speechId, 1)[0];
-    const partA = speech.text.slice(0, caretPosition);
-    const partB = speech.text.slice(caretPosition);
+    const paragraphs = speech.text.split('\n');
+    const firstSection = paragraphs.slice(0, paragraphIdx).join('\n');
+    // FIXME: if paragraphIdx is last paragraph
+    const secondSection = paragraphs.slice(paragraphIdx + 1).join('\n');
+    const p = paragraphs[paragraphIdx];
+
+    // FIXME the \n is optional if the section is empty
+    const partA = `${firstSection}\n${p.substring(0, caretPosition)}`;
+    const partB = `${p.substring(caretPosition)}\n${secondSection}`;
 
     const id = speech.speech_id;
 
@@ -165,17 +176,21 @@ class PlenumEditor extends Component {
     return (
       <div>
         <PlenumHeader {...this.state.meta}>
-          <AgendaItemPicker selectAgendaItem={this.selectAgendaItem} agendaItems={this.state.meta.agendaItems} />
+          <AgendaItemPicker
+            selectAgendaItem={this.selectAgendaItem}
+            agendaItems={this.state.meta.agendaItems}
+          />
         </PlenumHeader>
         <div className="Transcript">
           {this.state.contributions.map(i => {
+            const checked = i.agenda_item_uuid === this.state.selectedAgendaItem ? true : false;
             return (
               <div className="" key={i.uuid}>
                 <input
                   type="checkbox"
                   id={i.uuid}
                   onChange={this.toggleSpeechForAgendaItem}
-                  checked={i.agenda_item_uuid === this.state.selectedAgendaItem ? true : false}
+                  checked={checked}
                 />
                 <Contribution handleSplit={this.splitSpeech} editable {...i} />
               </div>
