@@ -16,7 +16,7 @@ class App extends Component {
         <div className="App">
           <Helmet>
             <title>PlenarNavi</title>
-            <meta name="description">TODO</meta>
+            <meta name="description" content="TODO" />
           </Helmet>
           <div className="Content">
             <Switch>
