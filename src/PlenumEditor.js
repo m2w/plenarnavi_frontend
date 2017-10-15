@@ -86,7 +86,7 @@ class PlenumEditor extends Component {
     const agendaItems = this.state.meta.agendaItems.slice();
     // remove the agendaItem we want to update
     const ai = agendaItems.splice(idx, 1)[0];
-    const as = new Set(ai.speeches);
+    const as = new Set(ai.speeches.map(s => { return s.uuid }));
     if (as.has(speechUUID)) {
       speech.agenda_item_uuid = undefined;
       as.delete(speechUUID);
@@ -95,7 +95,9 @@ class PlenumEditor extends Component {
       as.add(speechUUID);
     }
 
-    const updatedSpeeches = Array.from(as);
+    const updatedSpeeches = as.map(uuid => {
+      return { uuid: uuid };
+    });
     // update the speeches array
     ai.speeches = updatedSpeeches;
     // re-insert our updated agendaItem
@@ -153,8 +155,6 @@ class PlenumEditor extends Component {
       body: JSON.stringify(speechB)
     });
     Promise.all([a, b]).then(result => {
-      console.log('done here');
-      console.log(result);
       this.setState({ contributions: newCons });
     });
   }
