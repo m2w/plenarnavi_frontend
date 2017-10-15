@@ -10,6 +10,8 @@ import { sortById } from './utils/helpers';
 
 import './PlenumEditor.css';
 
+const apiRoot = 'http://localhost:5000';
+
 class PlenumEditor extends Component {
   constructor(props) {
     super(props);
@@ -95,7 +97,8 @@ class PlenumEditor extends Component {
       as.add(speechUUID);
     }
 
-    const updatedSpeeches = as.map(uuid => {
+    const agendaItemSpeeches = Array.from(as);
+    const updatedSpeeches = agendaItemSpeeches.map(uuid => {
       return { uuid: uuid };
     });
     // update the speeches array
@@ -106,8 +109,12 @@ class PlenumEditor extends Component {
     let newMeta = Object.assign({}, this.state.meta);
     newMeta.agendaItems = agendaItems;
 
-    fetch(`/speeches/${speechUUID}`, {
+    fetch(`${apiRoot}/speeches/${speechUUID}`, {
       method: 'PUT',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(speech)
     }).then(resp => {
       console.log(resp);
@@ -146,12 +153,20 @@ class PlenumEditor extends Component {
     newCons.splice(speechA.speech_id, 0, speechA);
     newCons.splice(speechB.speech_id, 0, speechB);
 
-    let a = fetch(`/speeches/${speechA.uuid}`, {
+    let a = fetch(`${apiRoot}/speeches/${speechA.uuid}`, {
       method: 'PUT',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(speechA)
     });
-    let b = fetch('/speeches/', {
+    let b = fetch(`${apiRoot}/speeches`, {
       method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(speechB)
     });
     Promise.all([a, b]).then(result => {
